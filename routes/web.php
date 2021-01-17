@@ -18,6 +18,10 @@ Route::get('/', function () {
     return view('app');
 });
 
+Route::get('{any}', function () {
+    return view('app');
+});
+
 
 // $limiter = config('fortify.limiters.login');
 $limiter = null;

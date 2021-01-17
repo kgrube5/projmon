@@ -21,7 +21,7 @@ use App\Models\User;
 
 
 Route::middleware('auth:sanctum')->group(function() {
-    Route::get('/users', function(){
-        return User::all();
+    Route::get('/user', function(Request $request){
+        return $request->user();
     });
 });
