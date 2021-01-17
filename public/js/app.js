@@ -1861,10 +1861,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
-      user: null,
+      user: [],
       formData: {
         'email': '',
         'password': ''
@@ -1873,9 +1877,23 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     login: function login() {
-      axios.get('/sanctum/csrf-cookie').then(function (response) {// axios.get('/login', this.formData).then(response => {
-        //     console.log(response);
-        // });
+      var _this = this;
+
+      axios.get('/sanctum/csrf-cookie').then(function (response) {
+        console.log(response);
+        axios.post('/login', _this.formData).then(function (response) {
+          console.log(response);
+
+          _this.getUsers();
+        });
+      });
+    },
+    getUsers: function getUsers() {
+      var _this2 = this;
+
+      axios.get('/api/users').then(function (response) {
+        console.log(response);
+        _this2.users = response.data;
       });
     }
   }
@@ -19899,7 +19917,9 @@ var render = function() {
         _vm._v(" "),
         _vm._m(0)
       ]
-    )
+    ),
+    _vm._v(" "),
+    _c("div")
   ])
 }
 var staticRenderFns = [

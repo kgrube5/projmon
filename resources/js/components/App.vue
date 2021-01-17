@@ -11,6 +11,10 @@
                 <button type="submit">Login</button>
             </div>
         </form>
+
+        <div>
+
+        </div>
     </div>
 </template>
 
@@ -18,7 +22,7 @@
     export default {
         data() {
             return {
-                user: null,
+                user: [],
                 formData: {
                     'email': '',
                     'password': ''
@@ -28,9 +32,17 @@
         methods: {
             login() {
                 axios.get('/sanctum/csrf-cookie').then(response => {
-                    // axios.get('/login', this.formData).then(response => {
-                    //     console.log(response);
-                    // });
+                    console.log(response);
+                    axios.post('/login', this.formData).then(response => {
+                        console.log(response);
+                        this.getUsers();
+                    });
+                });
+            },
+            getUsers() {
+                axios.get('/api/users').then(response => {
+                    console.log(response);
+                    this.users = response.data;
                 });
             }
         },
