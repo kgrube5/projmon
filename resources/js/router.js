@@ -8,7 +8,9 @@ import Profile from './components/ProfileComponent';
 import Login from './components/LoginComponent';
 import Dashboard from './components/DashboardComponent';
 import Tasks from './components/TasksComponent';
+import Task from './components/TaskComponent';
 import Projects from './components/ProjectsComponent';
+import Project from './components/ProjectComponent';
 
 export default new VueRouter({
     base: '/',
@@ -19,6 +21,8 @@ export default new VueRouter({
         { path: '/dashboard', name:'dashboard', component: Dashboard },
         { path: '/profile', name:'profile', component: Profile },
         { path: '/tasks', name:'tasks', component: Tasks },
+        { path: '/tasks/:id', name:'task', component: Task },
         { path: '/projects', name:'projects', component: Projects },
+        { path: '/projects/:id', name:'project', component: Project }
     ]
 });

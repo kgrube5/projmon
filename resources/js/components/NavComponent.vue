@@ -9,17 +9,17 @@
                     <div class="hidden md:block">
                         <div class="ml-10 flex items-baseline space-x-4">
                         
-                        <router-link to="dashboard"
+                        <router-link to="/dashboard"
                             v-bind:class="[this.$route.name === 'dashboard' ? activeNavClass : navClass]"
                             class="px-3 py-2 rounded-md text-sm font-medium"
                             >Dashboard</router-link>
 
-                        <router-link to="projects"
+                        <router-link to="/projects"
                             v-bind:class="[this.$route.name === 'projects' ? activeNavClass : navClass]"
                             class="px-3 py-2 rounded-md text-sm font-medium"
                             >Projects</router-link>
 
-                        <router-link to="tasks" 
+                        <router-link to="/tasks" 
                             v-bind:class="[this.$route.name === 'tasks' ? activeNavClass : navClass]"
                             class="px-3 py-2 rounded-md text-sm font-medium"
                             >Tasks</router-link>
@@ -46,7 +46,7 @@
                             </button>
                         </div>
                         <div v-bind:class="{hidden: profileMenuOff}" class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5" role="menu" aria-orientation="vertical" aria-labelledby="user-menu">
-                            <router-link to="profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Profile</router-link>
+                            <router-link to="/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Profile</router-link>
                             <form action="" @submit.prevent="logout">
                                 <button class="w-full text-left focus:outline-none block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem" type="submit">Logout</button>
                             </form>
@@ -69,17 +69,17 @@
         </div>
         <div class="md:hidden"  v-bind:class="{hidden: mobileMenuOff}">
             <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                <router-link to="dashboard"
+                <router-link to="/dashboard"
                     v-bind:class="[this.$route.name === 'dashboard' ? activeMobileNavClass : mobileNavClass]"
                     class="px-3 py-2 rounded-md text-base font-medium"
                     >Dashboard</router-link>
                 
-                <router-link to="projects"
+                <router-link to="/projects"
                     v-bind:class="[this.$route.name === 'projects' ? activeMobileNavClass : mobileNavClass]"
                     class="px-3 py-2 rounded-md text-base font-medium"
                     >Projects</router-link>
                 
-                <router-link to="tasks"
+                <router-link to="/tasks"
                     v-bind:class="[this.$route.name === 'tasks' ? activeMobileNavClass : mobileNavClass]"
                     class="px-3 py-2 rounded-md text-base font-medium"
                     >Tasks</router-link>
@@ -102,7 +102,7 @@
                     </button>
                 </div>
                 <div class="mt-3 px-2 space-y-1">
-                    <router-link to="profile"
+                    <router-link to="/profile"
                         v-bind:class="[this.$route.name === 'profile' ? activeMobileNavClass : mobileNavClass]"
                         class="px-3 py-2 rounded-md text-base font-medium"
                         >Your Profile</router-link>
@@ -127,9 +127,6 @@
                 navClass: 'text-gray-300 hover:bg-gray-700 hover:text-white',
                 mobileNavClass: 'text-gray-300 hover:bg-gray-700 hover:text-white block'
             }
-        },
-        mounted() {
-            console.log(this.$route.name);
         },
         methods: {
             logout() {

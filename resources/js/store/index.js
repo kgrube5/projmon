@@ -12,7 +12,8 @@ export default new Vuex.Store({
         storage: window.sessionStorage,
     })],
     state: {
-        user: null
+        user: null,
+        projects: []
     },
     modules: {},
     getters: getters,

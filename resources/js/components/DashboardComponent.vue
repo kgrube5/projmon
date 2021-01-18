@@ -28,17 +28,6 @@
     export default {
         components: {
             NavComponent
-        },
-        data() {
-            return {
-                
-            }
-        },
-        mounted() {
-            console.log(this.$store.state.user);
-        },
-        methods: {
-
         }
     }
 </script>
