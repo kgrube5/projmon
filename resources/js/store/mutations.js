@@ -4,5 +4,8 @@ export default {
     },
     removeUser(state) {
         state.user = null;
+    },
+    toggleLoginRegister(state) {
+        state.toggleLoginRegister = !state.toggleLoginRegister;
     }
 }

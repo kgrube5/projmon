@@ -75,14 +75,15 @@
       }
     },
     beforeCreate () {
-      axios.get('/sanctum/csrf-cookie').then(response => {
-        axios.get('/api/projects').then(response => {
-            if(!response.data.error) {
-              this.projects = response.data;
-            } else {
-              console.log(response.data.error);
-            }
-        });
+      axios.get('/api/projects')
+      .then(response => {
+          if(!response.data.error) {
+            this.projects = response.data;
+          }
+      }).catch(err => {
+        this.$store.commit('removeUser');
+        sessionStorage.clear();
+        this.$router.push('/');
       });
     }
   }

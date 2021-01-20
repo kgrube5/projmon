@@ -9,16 +9,16 @@
                     Sign in or register for an account
                 </p>
             </div>
-            <form class="mt-8 space-y-6" action="#" @submit.prevent="login">
+            <form class="mt-8 space-y-6" action="#" @submit.prevent="login" ref="loginform">
                 <input type="hidden" name="remember" value="true">
                 <div class="rounded-md shadow-sm -space-y-px">
                     <div>
                         <label for="email-address" class="sr-only">Email address</label>
-                        <input v-model="formData.email" name="email" type="email" autocomplete="email" required class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Email address">
+                        <input name="email" type="email" autocomplete="email" required class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Email address">
                     </div>
                     <div>
                         <label for="password" class="sr-only">Password</label>
-                        <input v-model="formData.password" name="password" type="password" autocomplete="current-password" required class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Password">
+                        <input name="password" type="password" autocomplete="current-password" required class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Password">
                     </div>
                 </div>
 
@@ -57,20 +57,27 @@
                 }
             }
         },
+        mounted () {
+            axios.get('/sanctum/csrf-cookie');
+        },
         methods: {
-            login() {
-                axios.get('/sanctum/csrf-cookie').then(response => {
-                    axios.post('/login', this.formData).then(response => {
+            async login() {
+                this.error = {};
+                try {
+                    const formData = new FormData(this.$refs.loginform);
+                    axios.post('/api/login', formData).then(response => {
                         if(!response.data.error) {
                             this.getUser();
-                            this.$router.push('dashboard');
                         }
                     });
-                });
+                } catch (err) {
+                    this.error = err;
+                }
             },
             getUser() {
                 axios.get('/api/user').then(response => {
                     this.$store.commit('updateUser', response.data);
+                    this.$router.push('/dashboard');
                 });
             }
         },

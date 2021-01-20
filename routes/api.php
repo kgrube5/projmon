@@ -17,11 +17,6 @@ use App\Models\Task;
 |
 */
 
-// Route::middleware('auth:api')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-
-
 Route::middleware('auth:sanctum')->group(function() {
 
     Route::get('/user', function(Request $request){
@@ -29,6 +24,9 @@ Route::middleware('auth:sanctum')->group(function() {
     });
 
     Route::get('/projects', function(Request $request) {
+        if(!$request->user()){
+            return response()->json(["Error" => "Cannot access if not logged in."]);
+        }
         return $request->user()->projects;
     });
 

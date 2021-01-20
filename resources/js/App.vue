@@ -1,21 +1,20 @@
 <template>
-    <div v-if="this.$store.state.user != null">
+    <div>
         <router-view></router-view>
-    </div>
-    <div v-else>
-        <login-component></login-component>
     </div>
 </template>
 
 <script>
     import LoginComponent from './components/LoginComponent';
+    import RegisterComponent from './components/RegisterComponent';
     export default {
         components: {
-            LoginComponent
+            LoginComponent,
+            RegisterComponent
         },
         data() {
             return {
-
+                
             }
         },
         methods: {}

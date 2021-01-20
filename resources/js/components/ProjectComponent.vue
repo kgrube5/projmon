@@ -82,25 +82,20 @@
             }
         },
         beforeCreate () {
-            
-            axios.get('/sanctum/csrf-cookie').then(response => {
-                axios.get('/api/projects/' + this.$route.params.id).then(response => {
-                    if(!response.data.error) {
-                        this.project = response.data;
-                    } else {
-                        console.log(response.data.error);
-                    }
-                });
+            axios.get('/api/projects/' + this.$route.params.id).then(response => {
+                if(!response.data.error) {
+                    this.project = response.data;
+                } else {
+                    console.log(response.data.error);
+                }
             });
 
-            axios.get('/sanctum/csrf-cookie').then(response => {
-                axios.get('/api/projects/' + this.$route.params.id + '/tasks').then(response => {
-                    if(!response.data.error) {
-                        this.projectTasks = response.data;
-                    } else {
-                        console.log(response.data.error);
-                    }
-                });
+            axios.get('/api/projects/' + this.$route.params.id + '/tasks').then(response => {
+                if(!response.data.error) {
+                    this.projectTasks = response.data;
+                } else {
+                    console.log(response.data.error);
+                }
             });
 
             

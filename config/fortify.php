@@ -74,7 +74,7 @@ return [
     |
     */
 
-    'prefix' => '',
+    'prefix' => 'api',
 
     'domain' => null,
 
@@ -103,7 +103,7 @@ return [
     */
 
     'limiters' => [
-        'login' => 'login',
+        'login' => null,
         'two-factor' => 'two-factor',
     ],
 
@@ -132,14 +132,14 @@ return [
     */
 
     'features' => [
-        // Features::registration(),
-        // Features::resetPasswords(),
-        // Features::emailVerification(),
-        // Features::updateProfileInformation(),
-        // Features::updatePasswords(),
-        // Features::twoFactorAuthentication([
-        //     'confirmPassword' => true,
-        // ]),
+        Features::registration(),
+        Features::resetPasswords(),
+        Features::emailVerification(),
+        Features::updateProfileInformation(),
+        Features::updatePasswords(),
+        Features::twoFactorAuthentication([
+            'confirmPassword' => true,
+        ]),
     ],
 
 ];

@@ -18,18 +18,14 @@ Route::get('/', function () {
     return view('app');
 });
 
-Route::get('{any}', function () {
+Route::get('/{any}', function () {
     return view('app');
 });
 
+Route::get('/{any}/{id}', function () {
+    return view('app');
+});
 
-// $limiter = config('fortify.limiters.login');
-$limiter = null;
-Route::post('/login', [AuthenticatedSessionController::class, 'store'])
-    ->middleware(array_filter([
-        'guest',
-        $limiter ? 'throttle:'.$limiter : null,
-    ]));
-
-Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
-    ->name('logout');
+Route::post('/login', function(){
+    return response()->json(["Error" => "Web login is denied."], 500);
+});

@@ -13,6 +13,7 @@ export default new Vuex.Store({
     })],
     state: {
         user: null,
+        toggleLoginRegister: false,
         projects: []
     },
     modules: {},
