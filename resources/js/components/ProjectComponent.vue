@@ -93,6 +93,7 @@
             axios.get('/api/projects/' + this.$route.params.id + '/tasks').then(response => {
                 if(!response.data.error) {
                     this.projectTasks = response.data;
+                    console.log(this.projectTasks);
                 } else {
                     console.log(response.data.error);
                 }

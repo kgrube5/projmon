@@ -47,7 +47,7 @@
                           </span>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          Admin
+                          {{project.user_id == userid ? 'Admin' : 'Member'}}
                         </td>
                       </tr>
 
@@ -72,6 +72,7 @@
     data() {
       return {
         projects: [],
+        userid: this.$store.state.user.id
       }
     },
     beforeCreate () {

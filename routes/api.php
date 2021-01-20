@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Resources\TaskResource;
 use App\Models\User;
 use App\Models\Project;
 use App\Models\Task;
@@ -35,11 +36,20 @@ Route::middleware('auth:sanctum')->group(function() {
     });
 
     Route::get('/projects/{id}/tasks', function($id) {
-        return Project::find($id)->tasks;
+        $tasks = Project::find($id)->tasks;
+        return $tasks;
+        //return TaskResource::collection($tasks);
+    });
+
+    Route::get('/tasks', function(Request $request) {
+        if(!$request->user()){
+            return response()->json(["Error" => "Cannot access if not logged in."]);
+        }
+        return TaskResource::collection($request->user()->assigned_tasks);
     });
 
     Route::get('/tasks/{id}', function($id) {
-        return Task::find($id);
+        return new TaskResource(Task::findOrFail($id));
     });
 
 });

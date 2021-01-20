@@ -2529,6 +2529,7 @@ __webpack_require__.r(__webpack_exports__);
     axios.get('/api/projects/' + this.$route.params.id + '/tasks').then(function (response) {
       if (!response.data.error) {
         _this.projectTasks = response.data;
+        console.log(_this.projectTasks);
       } else {
         console.log(response.data.error);
       }
@@ -2622,7 +2623,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      projects: []
+      projects: [],
+      userid: this.$store.state.user.id
     };
   },
   beforeCreate: function beforeCreate() {
@@ -2895,7 +2897,11 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      task: {}
+      task: {
+        project: {},
+        creator: {},
+        assignee: {}
+      }
     };
   },
   beforeCreate: function beforeCreate() {
@@ -2903,7 +2909,7 @@ __webpack_require__.r(__webpack_exports__);
 
     axios.get('/api/tasks/' + this.$route.params.id).then(function (response) {
       if (!response.data.error) {
-        _this.task = response.data;
+        _this.task = response.data.data;
       } else {
         console.log(response.data.error);
       }
@@ -2943,15 +2949,87 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
     NavComponent: _NavComponent__WEBPACK_IMPORTED_MODULE_0__.default
   },
   data: function data() {
-    return {};
+    return {
+      tasks: []
+    };
   },
-  mounted: function mounted() {}
+  beforeCreate: function beforeCreate() {
+    var _this = this;
+
+    axios.get('/api/tasks').then(function (response) {
+      if (!response.data.error) {
+        _this.tasks = response.data.data;
+      }
+    })["catch"](function (err) {// this.$store.commit('removeUser');
+      // sessionStorage.clear();
+      // this.$router.push('/');
+    });
+  }
 });
 
 /***/ }),
@@ -24248,7 +24326,13 @@ var render = function() {
                                     },
                                     [
                                       _vm._v(
-                                        "\r\n                          Admin\r\n                        "
+                                        "\r\n                          " +
+                                          _vm._s(
+                                            project.user_id == _vm.userid
+                                              ? "Admin"
+                                              : "Member"
+                                          ) +
+                                          "\r\n                        "
                                       )
                                     ]
                                   )
@@ -24731,20 +24815,20 @@ var render = function() {
                   {
                     name: "model",
                     rawName: "v-model",
-                    value: _vm.task.project_id,
-                    expression: "task.project_id"
+                    value: _vm.task.project.title,
+                    expression: "task.project.title"
                   }
                 ],
                 staticClass:
                   "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md",
                 attrs: { type: "text", disabled: "", "read-only": "" },
-                domProps: { value: _vm.task.project_id },
+                domProps: { value: _vm.task.project.title },
                 on: {
                   input: function($event) {
                     if ($event.target.composing) {
                       return
                     }
-                    _vm.$set(_vm.task, "project_id", $event.target.value)
+                    _vm.$set(_vm.task.project, "title", $event.target.value)
                   }
                 }
               })
@@ -24765,20 +24849,20 @@ var render = function() {
                   {
                     name: "model",
                     rawName: "v-model",
-                    value: _vm.task.type_id,
-                    expression: "task.type_id"
+                    value: _vm.task.type,
+                    expression: "task.type"
                   }
                 ],
                 staticClass:
                   "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md",
                 attrs: { type: "text", disabled: "", "read-only": "" },
-                domProps: { value: _vm.task.type_id },
+                domProps: { value: _vm.task.type },
                 on: {
                   input: function($event) {
                     if ($event.target.composing) {
                       return
                     }
-                    _vm.$set(_vm.task, "type_id", $event.target.value)
+                    _vm.$set(_vm.task, "type", $event.target.value)
                   }
                 }
               })
@@ -24902,20 +24986,20 @@ var render = function() {
                   {
                     name: "model",
                     rawName: "v-model",
-                    value: _vm.task.creator_id,
-                    expression: "task.creator_id"
+                    value: _vm.task.creator.name,
+                    expression: "task.creator.name"
                   }
                 ],
                 staticClass:
                   "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md",
                 attrs: { type: "text", disabled: "", "read-only": "" },
-                domProps: { value: _vm.task.creator_id },
+                domProps: { value: _vm.task.creator.name },
                 on: {
                   input: function($event) {
                     if ($event.target.composing) {
                       return
                     }
-                    _vm.$set(_vm.task, "creator_id", $event.target.value)
+                    _vm.$set(_vm.task.creator, "name", $event.target.value)
                   }
                 }
               })
@@ -24938,8 +25022,8 @@ var render = function() {
                     {
                       name: "model",
                       rawName: "v-model",
-                      value: _vm.task.assignee_id,
-                      expression: "task.assignee_id"
+                      value: _vm.task.assignee.id,
+                      expression: "task.assignee.id"
                     }
                   ],
                   staticClass:
@@ -24956,8 +25040,8 @@ var render = function() {
                           return val
                         })
                       _vm.$set(
-                        _vm.task,
-                        "assignee_id",
+                        _vm.task.assignee,
+                        "id",
                         $event.target.multiple
                           ? $$selectedVal
                           : $$selectedVal[0]
@@ -24994,8 +25078,8 @@ var render = function() {
                     {
                       name: "model",
                       rawName: "v-model",
-                      value: _vm.task.progress_id,
-                      expression: "task.progress_id"
+                      value: _vm.task.progress,
+                      expression: "task.progress"
                     }
                   ],
                   staticClass:
@@ -25013,7 +25097,7 @@ var render = function() {
                         })
                       _vm.$set(
                         _vm.task,
-                        "progress_id",
+                        "progress",
                         $event.target.multiple
                           ? $$selectedVal
                           : $$selectedVal[0]
@@ -25148,7 +25232,173 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    [_c("nav-component"), _vm._v(" "), _vm._m(0), _vm._v(" "), _vm._m(1)],
+    [
+      _c("nav-component"),
+      _vm._v(" "),
+      _vm._m(0),
+      _vm._v(" "),
+      _c("main", [
+        _c("div", { staticClass: "max-w-7xl mx-auto py-6 sm:px-6 lg:px-8" }, [
+          _c("div", { staticClass: "flex flex-col" }, [
+            _c(
+              "div",
+              { staticClass: "-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8" },
+              [
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8"
+                  },
+                  [
+                    _c(
+                      "div",
+                      {
+                        staticClass:
+                          "shadow overflow-hidden border-b border-gray-200 sm:rounded-lg"
+                      },
+                      [
+                        _c(
+                          "table",
+                          {
+                            staticClass: "min-w-full divide-y divide-gray-200"
+                          },
+                          [
+                            _vm._m(1),
+                            _vm._v(" "),
+                            _c(
+                              "tbody",
+                              {
+                                staticClass: "bg-white divide-y divide-gray-200"
+                              },
+                              _vm._l(this.tasks, function(task) {
+                                return _c("tr", { key: task.id }, [
+                                  _c(
+                                    "td",
+                                    {
+                                      staticClass: "px-6 py-4 whitespace-nowrap"
+                                    },
+                                    [
+                                      _c(
+                                        "router-link",
+                                        {
+                                          attrs: {
+                                            to: {
+                                              name: "task",
+                                              params: { id: task.id }
+                                            }
+                                          }
+                                        },
+                                        [_vm._v(_vm._s(task.title))]
+                                      )
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "td",
+                                    {
+                                      staticClass: "px-6 py-4 whitespace-nowrap"
+                                    },
+                                    [
+                                      _c(
+                                        "router-link",
+                                        {
+                                          attrs: {
+                                            to: {
+                                              name: "project",
+                                              params: { id: task.project.id }
+                                            }
+                                          }
+                                        },
+                                        [_vm._v(_vm._s(task.project.title))]
+                                      )
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "td",
+                                    {
+                                      staticClass: "px-6 py-4 whitespace-nowrap"
+                                    },
+                                    [
+                                      _vm._v(
+                                        "\n                          " +
+                                          _vm._s(task.type) +
+                                          "\n                        "
+                                      )
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "td",
+                                    {
+                                      staticClass: "px-6 py-4 whitespace-nowrap"
+                                    },
+                                    [
+                                      _c(
+                                        "span",
+                                        {
+                                          staticClass:
+                                            "px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800"
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                            " +
+                                              _vm._s(task.progress) +
+                                              "\n                          "
+                                          )
+                                        ]
+                                      )
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "td",
+                                    {
+                                      staticClass:
+                                        "px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                                    },
+                                    [
+                                      _vm._v(
+                                        "\n                          " +
+                                          _vm._s(task.creator.name) +
+                                          "\n                        "
+                                      )
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "td",
+                                    {
+                                      staticClass:
+                                        "px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                                    },
+                                    [
+                                      _vm._v(
+                                        "\n                          " +
+                                          _vm._s(task.priority) +
+                                          "\n                        "
+                                      )
+                                    ]
+                                  )
+                                ])
+                              }),
+                              0
+                            )
+                          ]
+                        )
+                      ]
+                    )
+                  ]
+                )
+              ]
+            )
+          ])
+        ])
+      ])
+    ],
     1
   )
 }
@@ -25165,7 +25415,7 @@ var staticRenderFns = [
           _c(
             "h1",
             { staticClass: "text-3xl font-bold leading-tight text-gray-900" },
-            [_vm._v("\r\n                Tasks\r\n            ")]
+            [_vm._v("\n                My Tasks\n            ")]
           )
         ]
       )
@@ -25175,8 +25425,84 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("main", [
-      _c("div", { staticClass: "max-w-7xl mx-auto py-6 sm:px-6 lg:px-8" })
+    return _c("thead", { staticClass: "bg-gray-50" }, [
+      _c("tr", [
+        _c(
+          "th",
+          {
+            staticClass:
+              "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
+            attrs: { scope: "col" }
+          },
+          [_vm._v("\n                          Task\n                        ")]
+        ),
+        _vm._v(" "),
+        _c(
+          "th",
+          {
+            staticClass:
+              "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
+            attrs: { scope: "col" }
+          },
+          [
+            _vm._v(
+              "\n                          Project Name\n                        "
+            )
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "th",
+          {
+            staticClass:
+              "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
+            attrs: { scope: "col" }
+          },
+          [_vm._v("\n                          Type\n                        ")]
+        ),
+        _vm._v(" "),
+        _c(
+          "th",
+          {
+            staticClass:
+              "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
+            attrs: { scope: "col" }
+          },
+          [
+            _vm._v(
+              "\n                          Progress\n                        "
+            )
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "th",
+          {
+            staticClass:
+              "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
+            attrs: { scope: "col" }
+          },
+          [
+            _vm._v(
+              "\n                          Reporter\n                        "
+            )
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "th",
+          {
+            staticClass:
+              "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
+            attrs: { scope: "col" }
+          },
+          [
+            _vm._v(
+              "\n                          Priority\n                        "
+            )
+          ]
+        )
+      ])
     ])
   }
 ]

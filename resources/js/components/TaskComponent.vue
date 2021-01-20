@@ -17,14 +17,14 @@
                     <label for="project" class="block text-sm font-medium text-gray-700">Project</label>
                     <input
                     class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                    type="text" v-model="task.project_id" disabled read-only/>
+                    type="text" v-model="task.project.title" disabled read-only/>
                 </div>
 
                 <div class="col-span-6 sm:col-span-4">
                     <label for="type" class="block text-sm font-medium text-gray-700">Type</label>
                     <input
                     class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                    type="text" v-model="task.type_id" disabled read-only/>
+                    type="text" v-model="task.type" disabled read-only/>
                 </div>
                 
                 <div class="col-span-6 sm:col-span-4">
@@ -55,14 +55,14 @@
                     <label for="creator" class="block text-sm font-medium text-gray-700">Creator</label>
                     <input 
                     class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                    type="text" v-model="task.creator_id" disabled read-only/>
+                    type="text" v-model="task.creator.name" disabled read-only/>
                 </div>
 
                 <div class="col-span-6 sm:col-span-4">
                     <label for="assignee" class="block text-sm font-medium text-gray-700">Assigned To</label>
                     <select 
                     class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                    v-model="task.assignee_id" name="assignee" id="assignee">
+                    v-model="task.assignee.id" name="assignee" id="assignee">
                         <option value="null">Not Assigned</option>
                         <option value="1">Person 1</option>
                         <option value="2">Person 2</option>
@@ -73,7 +73,7 @@
                     <label for="progress" class="block text-sm font-medium text-gray-700">Progress</label>
                     <select
                     class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                    v-model="task.progress_id" name="progress" id="progress">
+                    v-model="task.progress" name="progress" id="progress">
                         <option value="0">Idle</option>
                         <option value="1">Started</option>
                         <option value="2">Completed</option>
@@ -120,15 +120,20 @@
         },
         data() {
             return {
-                task: {}
+                task: {
+                    project: {},
+                    creator: {},
+                    assignee: {}
+                }
             }
         },
         beforeCreate () {
-            axios.get('/api/tasks/' + this.$route.params.id).then(response => {
+            axios.get('/api/tasks/' + this.$route.params.id)
+            .then(response => {
                 if(!response.data.error) {
-                this.task = response.data;
+                    this.task = response.data.data;
                 } else {
-                console.log(response.data.error);
+                    console.log(response.data.error);
                 }
             });
         },
