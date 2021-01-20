@@ -36,9 +36,7 @@ Route::middleware('auth:sanctum')->group(function() {
     });
 
     Route::get('/projects/{id}/tasks', function($id) {
-        $tasks = Project::find($id)->tasks;
-        return $tasks;
-        //return TaskResource::collection($tasks);
+        return TaskResource::collection($Project::find($id)->tasks);
     });
 
     Route::get('/tasks', function(Request $request) {

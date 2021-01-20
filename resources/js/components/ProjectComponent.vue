@@ -12,10 +12,9 @@
         <main>
             <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
 
-                <h2>Your Tasks for {{this.project.title}}</h2>
-
-
-                <h2>All Tasks for {{this.project.title}}</h2>
+                <h2 class="text-3xl font-bold leading-tight text-gray-900">
+                    Your Tasks for {{this.project.title}}
+                </h2>
                 <div class="flex flex-col">
                     <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                     <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
@@ -27,7 +26,60 @@
                                 Task
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Description
+                                Assignee
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Priority
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Reporter
+                                </th>
+                            </tr>
+                            </thead>
+
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                
+                                <tr v-for="task in this.projectTasks" :key="task.id" v-show="task.assignee.id == userid">
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <router-link :to="{ name: 'task', params: { id: task.id }}">{{task.title}}</router-link>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        {{task.assignee.name != null ? task.assignee.name : 'Not Assigned'}}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                            {{task.priority}}
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        {{task.creator.name}}
+                                    </td>
+                                </tr>
+
+                            <!-- More items... -->
+                            </tbody>
+                        </table>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+
+                <h2 class="text-3xl font-bold leading-tight text-gray-900">
+                    All Tasks for {{this.project.title}}
+                </h2>
+                <div class="flex flex-col">
+                    <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                    <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+                        <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Task
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Assignee
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Priority
@@ -43,16 +95,16 @@
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <router-link :to="{ name: 'task', params: { id: task.id }}">{{task.title}}</router-link>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <!-- {{task.description}} -->
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    {{task.assignee.name != null ? task.assignee.name : 'Not Assigned'}}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                    {{task.priority}}
-                                </span>
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                        {{task.priority}}
+                                    </span>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                {{task.creator_id}}
+                                    {{task.creator.name}}
                                 </td>
                             </tr>
 
@@ -77,6 +129,7 @@
         },
         data() {
             return {
+                userid: this.$store.state.user.id,
                 project: {},
                 projectTasks: []
             }
@@ -92,14 +145,12 @@
 
             axios.get('/api/projects/' + this.$route.params.id + '/tasks').then(response => {
                 if(!response.data.error) {
-                    this.projectTasks = response.data;
+                    this.projectTasks = response.data.data;
                     console.log(this.projectTasks);
                 } else {
                     console.log(response.data.error);
                 }
             });
-
-            
         },
     }
 </script>

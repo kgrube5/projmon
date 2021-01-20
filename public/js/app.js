@@ -2505,6 +2505,58 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
@@ -2512,6 +2564,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      userid: this.$store.state.user.id,
       project: {},
       projectTasks: []
     };
@@ -2528,7 +2581,7 @@ __webpack_require__.r(__webpack_exports__);
     });
     axios.get('/api/projects/' + this.$route.params.id + '/tasks').then(function (response) {
       if (!response.data.error) {
-        _this.projectTasks = response.data;
+        _this.projectTasks = response.data.data;
         console.log(_this.projectTasks);
       } else {
         console.log(response.data.error);
@@ -3023,6 +3076,7 @@ __webpack_require__.r(__webpack_exports__);
 
     axios.get('/api/tasks').then(function (response) {
       if (!response.data.error) {
+        console.log(response.data.data);
         _this.tasks = response.data.data;
       }
     })["catch"](function (err) {// this.$store.commit('removeUser');
@@ -24031,9 +24085,17 @@ var render = function() {
       _vm._v(" "),
       _c("main", [
         _c("div", { staticClass: "max-w-7xl mx-auto py-6 sm:px-6 lg:px-8" }, [
-          _c("h2", [_vm._v("Your Tasks for " + _vm._s(this.project.title))]),
-          _vm._v(" "),
-          _c("h2", [_vm._v("All Tasks for " + _vm._s(this.project.title))]),
+          _c(
+            "h2",
+            { staticClass: "text-3xl font-bold leading-tight text-gray-900" },
+            [
+              _vm._v(
+                "\n                Your Tasks for " +
+                  _vm._s(this.project.title) +
+                  "\n            "
+              )
+            ]
+          ),
           _vm._v(" "),
           _c("div", { staticClass: "flex flex-col" }, [
             _c(
@@ -24068,6 +24130,160 @@ var render = function() {
                                 staticClass: "bg-white divide-y divide-gray-200"
                               },
                               _vm._l(this.projectTasks, function(task) {
+                                return _c(
+                                  "tr",
+                                  {
+                                    directives: [
+                                      {
+                                        name: "show",
+                                        rawName: "v-show",
+                                        value: task.assignee.id == _vm.userid,
+                                        expression: "task.assignee.id == userid"
+                                      }
+                                    ],
+                                    key: task.id
+                                  },
+                                  [
+                                    _c(
+                                      "td",
+                                      {
+                                        staticClass:
+                                          "px-6 py-4 whitespace-nowrap"
+                                      },
+                                      [
+                                        _c(
+                                          "router-link",
+                                          {
+                                            attrs: {
+                                              to: {
+                                                name: "task",
+                                                params: { id: task.id }
+                                              }
+                                            }
+                                          },
+                                          [_vm._v(_vm._s(task.title))]
+                                        )
+                                      ],
+                                      1
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "td",
+                                      {
+                                        staticClass:
+                                          "px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                                      },
+                                      [
+                                        _vm._v(
+                                          "\n                                    " +
+                                            _vm._s(
+                                              task.assignee.name != null
+                                                ? task.assignee.name
+                                                : "Not Assigned"
+                                            ) +
+                                            "\n                                "
+                                        )
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "td",
+                                      {
+                                        staticClass:
+                                          "px-6 py-4 whitespace-nowrap"
+                                      },
+                                      [
+                                        _c(
+                                          "span",
+                                          {
+                                            staticClass:
+                                              "px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800"
+                                          },
+                                          [
+                                            _vm._v(
+                                              "\n                                        " +
+                                                _vm._s(task.priority) +
+                                                "\n                                    "
+                                            )
+                                          ]
+                                        )
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "td",
+                                      {
+                                        staticClass:
+                                          "px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                                      },
+                                      [
+                                        _vm._v(
+                                          "\n                                    " +
+                                            _vm._s(task.creator.name) +
+                                            "\n                                "
+                                        )
+                                      ]
+                                    )
+                                  ]
+                                )
+                              }),
+                              0
+                            )
+                          ]
+                        )
+                      ]
+                    )
+                  ]
+                )
+              ]
+            )
+          ]),
+          _vm._v(" "),
+          _c(
+            "h2",
+            { staticClass: "text-3xl font-bold leading-tight text-gray-900" },
+            [
+              _vm._v(
+                "\n                All Tasks for " +
+                  _vm._s(this.project.title) +
+                  "\n            "
+              )
+            ]
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "flex flex-col" }, [
+            _c(
+              "div",
+              { staticClass: "-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8" },
+              [
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8"
+                  },
+                  [
+                    _c(
+                      "div",
+                      {
+                        staticClass:
+                          "shadow overflow-hidden border-b border-gray-200 sm:rounded-lg"
+                      },
+                      [
+                        _c(
+                          "table",
+                          {
+                            staticClass: "min-w-full divide-y divide-gray-200"
+                          },
+                          [
+                            _vm._m(1),
+                            _vm._v(" "),
+                            _c(
+                              "tbody",
+                              {
+                                staticClass: "bg-white divide-y divide-gray-200"
+                              },
+                              _vm._l(this.projectTasks, function(task) {
                                 return _c("tr", { key: task.id }, [
                                   _c(
                                     "td",
@@ -24091,9 +24307,24 @@ var render = function() {
                                     1
                                   ),
                                   _vm._v(" "),
-                                  _c("td", {
-                                    staticClass: "px-6 py-4 whitespace-nowrap"
-                                  }),
+                                  _c(
+                                    "td",
+                                    {
+                                      staticClass:
+                                        "px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                                    },
+                                    [
+                                      _vm._v(
+                                        "\n                                " +
+                                          _vm._s(
+                                            task.assignee.name != null
+                                              ? task.assignee.name
+                                              : "Not Assigned"
+                                          ) +
+                                          "\n                            "
+                                      )
+                                    ]
+                                  ),
                                   _vm._v(" "),
                                   _c(
                                     "td",
@@ -24109,9 +24340,9 @@ var render = function() {
                                         },
                                         [
                                           _vm._v(
-                                            "\n                                " +
+                                            "\n                                    " +
                                               _vm._s(task.priority) +
-                                              "\n                            "
+                                              "\n                                "
                                           )
                                         ]
                                       )
@@ -24126,8 +24357,8 @@ var render = function() {
                                     },
                                     [
                                       _vm._v(
-                                        "\n                            " +
-                                          _vm._s(task.creator_id) +
+                                        "\n                                " +
+                                          _vm._s(task.creator.name) +
                                           "\n                            "
                                       )
                                     ]
@@ -24181,7 +24412,71 @@ var staticRenderFns = [
           },
           [
             _vm._v(
-              "\n                            Description\n                            "
+              "\n                            Assignee\n                            "
+            )
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "th",
+          {
+            staticClass:
+              "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
+            attrs: { scope: "col" }
+          },
+          [
+            _vm._v(
+              "\n                            Priority\n                            "
+            )
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "th",
+          {
+            staticClass:
+              "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
+            attrs: { scope: "col" }
+          },
+          [
+            _vm._v(
+              "\n                            Reporter\n                            "
+            )
+          ]
+        )
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", { staticClass: "bg-gray-50" }, [
+      _c("tr", [
+        _c(
+          "th",
+          {
+            staticClass:
+              "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
+            attrs: { scope: "col" }
+          },
+          [
+            _vm._v(
+              "\n                            Task\n                            "
+            )
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "th",
+          {
+            staticClass:
+              "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
+            attrs: { scope: "col" }
+          },
+          [
+            _vm._v(
+              "\n                            Assignee\n                            "
             )
           ]
         ),
@@ -24368,7 +24663,7 @@ var staticRenderFns = [
           _c(
             "h1",
             { staticClass: "text-3xl font-bold leading-tight text-gray-900" },
-            [_vm._v("\r\n                Projects\r\n            ")]
+            [_vm._v("\r\n                My Projects\r\n            ")]
           )
         ]
       )

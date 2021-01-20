@@ -41,6 +41,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public static function findOrNull($id, $col)
+    {
+        return self::find($id)->$col ?? null;
+    }
+
     public function projects()
     {
         return $this->belongsToMany(Project::class);

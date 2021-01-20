@@ -31,8 +31,8 @@ class TaskResource extends JsonResource
             ],
             'assignee' => [
                 'id' => $this->assignee_id,
-                'name' => User::find($this->assignee_id)->name,
-                'email' => User::find($this->assignee_id)->email
+                'name' => User::findOrNull($this->assignee_id, 'name'),
+                'email' => User::findOrNull($this->assignee_id, 'email')
             ],
             'type' => $this->type_id,
             'progress' => $this->progress_id,
