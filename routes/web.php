@@ -26,6 +26,6 @@ Route::get('/{any}/{id}', function () {
     return view('app');
 });
 
-Route::post('/login', function(){
-    return response()->json(["Error" => "Web login is denied."], 500);
+Route::get('/{any}/{id}/{task}/{taskid}', function () {
+    return view('app');
 });

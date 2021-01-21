@@ -51,6 +51,11 @@ class User extends Authenticatable
         return $this->belongsToMany(Project::class);
     }
 
+    public function created_tasks()
+    {
+        return $this->hasMany(Task::class, 'creator_id');
+    }
+
     public function assigned_tasks()
     {
         return $this->hasMany(Task::class, 'assignee_id');

@@ -19,26 +19,6 @@
                     class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                     type="text" v-model="task.project.title" disabled read-only/>
                 </div>
-
-                <div class="col-span-6 sm:col-span-4">
-                    <label for="type" class="block text-sm font-medium text-gray-700">Type</label>
-                    <input
-                    class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                    type="text" v-model="task.type" disabled read-only/>
-                </div>
-                
-                <div class="col-span-6 sm:col-span-4">
-                    <label for="priority" class="block text-sm font-medium text-gray-700">Priority</label>
-                    <select 
-                    class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                    v-model="task.priority" name="priority" id="priority">
-                        <option value="lowest">Lowest</option>
-                        <option value="low">Low</option>
-                        <option value="medium">Medium</option>
-                        <option value="high">High</option>
-                        <option value="highest">Highest</option>
-                    </select>
-                </div>
                 
                 <div class="col-span-6 sm:col-span-4">
                     <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
@@ -59,25 +39,23 @@
                 </div>
 
                 <div class="col-span-6 sm:col-span-4">
+                    <label for="type" class="block text-sm font-medium text-gray-700">Type</label>
+                    <type-option :selectedType="task.type.id"></type-option>
+                </div>
+
+                <div class="col-span-6 sm:col-span-4">
                     <label for="assignee" class="block text-sm font-medium text-gray-700">Assigned To</label>
-                    <select 
-                    class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                    v-model="task.assignee.id" name="assignee" id="assignee">
-                        <option value="null">Not Assigned</option>
-                        <option value="1">Person 1</option>
-                        <option value="2">Person 2</option>
-                    </select>
+                    <people-option :selectedPerson="task.assignee.id || 0"></people-option>
                 </div>
 
                 <div class="col-span-6 sm:col-span-4">
                     <label for="progress" class="block text-sm font-medium text-gray-700">Progress</label>
-                    <select
-                    class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                    v-model="task.progress" name="progress" id="progress">
-                        <option value="0">Idle</option>
-                        <option value="1">Started</option>
-                        <option value="2">Completed</option>
-                    </select>
+                    <progress-option :selectedProgress="task.progress.id"></progress-option>
+                </div>
+
+                <div class="col-span-6 sm:col-span-4">
+                    <label for="priority" class="block text-sm font-medium text-gray-700">Priority</label>
+                    <priority-option :selectedPriority="task.priority.id"></priority-option>
                 </div>
 
                 <div class="col-span-6 sm:col-span-4">
@@ -90,10 +68,15 @@
 
             <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
                 <h1 class="text-3xl font-bold leading-tight text-gray-900">Comments</h1>
-                <p>No comments yet...</p>
+                <p v-if="!comments.length">No comments yet...</p>
+                <ul v-if="comments.length">
+                    <li v-for="comment in comments" :key="comment.id">{{comment.comment}}</li>
+                </ul>
             </div>
 
-            <form action="" ref="commentform" class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+            <form action="" @submit.prevent="submitComment" ref="commentform" class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+                <input type="hidden" name="id" v-model="this.$route.params.taskid">
+                <input type="hidden" name="type" value="task">
                 <div class="col-span-6 sm:col-span-4">
                     <label for="comment" 
                     class="block text-sm font-medium text-gray-700">Add Comment</label>
@@ -102,7 +85,7 @@
                     name="comment" id="comment" cols="30" rows="10"></textarea>
                 </div>
                 <div class="col-span-6 sm:col-span-4">
-                    <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    <button type="submit" :disabled="disableCommentForm" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                         Submit Comment
                     </button>
                 </div>
@@ -114,21 +97,35 @@
 
 <script>
     import NavComponent from './NavComponent';
+    import TypeOption from './TypeOptions';
+    import ProgressOption from './ProgressOptions';
+    import PeopleOption from './PeopleOptions';
+    import PriorityOption from './PriorityOptions';
     export default {
         components: {
             NavComponent,
+            TypeOption,
+            ProgressOption,
+            PeopleOption,
+            PriorityOption
         },
         data() {
             return {
                 task: {
                     project: {},
                     creator: {},
-                    assignee: {}
-                }
+                    assignee: {},
+                    type: {},
+                    progress: {},
+                    priority: {}
+                },
+                comments: [],
+                disableCommentForm: false
             }
         },
         beforeCreate () {
-            axios.get('/api/tasks/' + this.$route.params.id)
+            axios.get('/sanctum/csrf-cookie');
+            axios.get('/api/tasks/' + this.$route.params.taskid)
             .then(response => {
                 if(!response.data.error) {
                     this.task = response.data.data;
@@ -136,7 +133,29 @@
                     console.log(response.data.error);
                 }
             });
+
+            axios.get('/api/tasks/' + this.$route.params.taskid + '/comments')
+            .then(response => {
+                if(!response.data.error) {
+                    this.comments = response.data;
+                } else {
+                    console.log(response.data.error);
+                }
+            });
         },
+        methods: {
+            submitComment() {
+                const formData = new FormData(this.$refs.commentform);
+                this.disableCommentForm = true;
+                axios.post('/api/comment', formData).then(response => {
+                    if(response.data.success){
+                        this.$refs.commentform.comment.value = '';
+                        this.disableCommentForm = false;
+                        this.comments.push(response.data.data);
+                    }
+                });
+            }
+        }
     }
 </script>
 

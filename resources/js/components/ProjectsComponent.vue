@@ -7,6 +7,9 @@
             <h1 class="text-3xl font-bold leading-tight text-gray-900">
                 My Projects
             </h1>
+            <button @click="toggleCreate" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+              + Create Project
+            </button>
         </div>
     </header>
     <main>
@@ -34,7 +37,7 @@
                     </thead>
 
                     <tbody class="bg-white divide-y divide-gray-200">
-                      <tr v-for="project in this.projects" :key="project.id">
+                      <tr v-for="project in projects" :key="project.id">
                         <td class="px-6 py-4 whitespace-nowrap">
                           <router-link :to="{ name: 'project', params: { id: project.id }}">{{project.title}}</router-link>
                         </td>
@@ -60,14 +63,19 @@
           </div>
         </div>
     </main>
+
+    <create-project v-if="this.$store.state.toggleCreateProject"></create-project>
+    
 </div>
 </template>
 
 <script>
   import NavComponent from './NavComponent';
+  import CreateProject from './ProjectCreateComponent'
   export default {
     components: {
       NavComponent,
+      CreateProject
     },
     data() {
       return {
@@ -86,6 +94,11 @@
         sessionStorage.clear();
         this.$router.push('/');
       });
+    },
+    methods: {
+      toggleCreate() {
+        this.$store.commit('toggleCreateProject')
+      }
     }
   }
 </script>

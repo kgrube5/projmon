@@ -7,5 +7,11 @@ export default {
     },
     toggleLoginRegister(state) {
         state.toggleLoginRegister = !state.toggleLoginRegister;
+    },
+    toggleCreateProject(state) {
+        state.toggleCreateProject = !state.toggleCreateProject;
+    },
+    toggleCreateTask(state) {
+        state.toggleCreateTask = !state.toggleCreateTask;
     }
 }

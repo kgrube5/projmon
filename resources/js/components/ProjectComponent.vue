@@ -7,6 +7,9 @@
                 <h1 class="text-3xl font-bold leading-tight text-gray-900">
                     Project: {{this.project.title}}
                 </h1>
+                <button @click="toggleCreate" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                + Create Task
+                </button>
             </div>
         </header>
         <main>
@@ -41,14 +44,14 @@
                                 
                                 <tr v-for="task in this.projectTasks" :key="task.id" v-show="task.assignee.id == userid">
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        <router-link :to="{ name: 'task', params: { id: task.id }}">{{task.title}}</router-link>
+                                        <router-link :to="{ name: 'task', params: { id: project.id, taskid: task.id }}">{{task.title}}</router-link>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                         {{task.assignee.name != null ? task.assignee.name : 'Not Assigned'}}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                            {{task.priority}}
+                                            {{task.priority.name}}
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -93,14 +96,14 @@
                             <tbody class="bg-white divide-y divide-gray-200">
                             <tr v-for="task in this.projectTasks" :key="task.id">
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    <router-link :to="{ name: 'task', params: { id: task.id }}">{{task.title}}</router-link>
+                                    <router-link :to="{ name: 'task', params: { id: project.id, taskid: task.id }}">{{task.title}}</router-link>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                     {{task.assignee.name != null ? task.assignee.name : 'Not Assigned'}}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                        {{task.priority}}
+                                        {{task.priority.name}}
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -118,14 +121,19 @@
 
             </div>
         </main>
+
+        <create-task v-if="this.$store.state.toggleCreateTask"></create-task>
+
     </div>
 </template>
 
 <script>
     import NavComponent from './NavComponent';
+    import CreateTask from './TaskCreateComponent';
     export default {
         components: {
             NavComponent,
+            CreateTask
         },
         data() {
             return {
@@ -146,12 +154,16 @@
             axios.get('/api/projects/' + this.$route.params.id + '/tasks').then(response => {
                 if(!response.data.error) {
                     this.projectTasks = response.data.data;
-                    console.log(this.projectTasks);
                 } else {
                     console.log(response.data.error);
                 }
             });
         },
+        methods: {
+            toggleCreate() {
+                this.$store.commit('toggleCreateTask');
+            }
+        }
     }
 </script>
 

@@ -14,7 +14,8 @@ export default new Vuex.Store({
     state: {
         user: null,
         toggleLoginRegister: false,
-        projects: []
+        toggleCreateProject: false,
+        toggleCreateTask: false
     },
     modules: {},
     getters: getters,
